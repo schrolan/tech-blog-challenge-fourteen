@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "title": "I love CSS",
+        "description": "I think CSS is very fun and easy to use. It is very nice.",
+        "date_created": "03-05-2024",
+        "user_id": 1
+    },
+    {
+        "id": 2,
+        "title": "I love JS",
+        "description": "I think JS is very fun and easy to use. It is very nice.",
+        "date_created": "02-04-2024",
+        "user_id": 2
+    },
+    {
+        "id": 3,
+        "title": "I love React",
+        "description": "I think React is very fun and easy to use. It is very nice.",
+        "date_created": "01-03-2024",
+        "user_id": 3
+    }
+]

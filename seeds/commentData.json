@@ -1,0 +1,23 @@
+[
+    {
+        "id": 1,
+        "comment_body": "I agree with all of your points!",
+        "date_created": "03-05-2024",
+        "user_id": 2,
+        "post_id": 1
+    },
+    {
+        "id": 2,
+        "comment_body": "I disagree with all of your points!",
+        "date_created": "02-04-2024",
+        "user_id": 1,
+        "post_id": 2
+    },
+    {
+        "id": 3,
+        "comment_body": "I have no thoughts about all of your points!",
+        "date_created": "03-05-2024",
+        "user_id": 1,
+        "post_id": 3
+    }
+]

@@ -62,6 +62,7 @@ router.delete("/:id", async (req, res) => {
         if (!comment) {
             res.status(404).json({ message: "Comment does not exist." })
         }
+        res.status(200).json({ message: "Comment deleted." })
     } catch (err) {
         res.status(400).json(err)
     }
