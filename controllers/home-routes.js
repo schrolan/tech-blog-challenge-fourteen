@@ -10,12 +10,16 @@ router.get('/', async (req, res) => {
           model: User,
           attributes: ['name'],
         },
+        {
+          model: Comment,
+          attributes: ['comment_body']
+        }
       ],
     });
 
     const posts = postData.map((post) => post.get({ plain: true }));
 
-    res.render('allPosts', { 
+    res.render('homepage', { 
       posts, 
       logged_in: req.session.logged_in 
     });
@@ -32,6 +36,10 @@ router.get('/post/:id', async (req, res) => {
           model: User,
           attributes: ['name'],
         },
+        {
+          model: Comment,
+          include: [User]
+        }
       ],
     });
 
@@ -42,20 +50,28 @@ router.get('/post/:id', async (req, res) => {
       logged_in: req.session.logged_in
     });
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json(err)
+    res.redirect('login')
   }
 });
 
-router.get('/profile', withAuth, async (req, res) => {
+router.get('/dashboard', withAuth, async (req, res) => {
   try {
     const userData = await User.findByPk(req.session.user_id, {
       attributes: { exclude: ['password'] },
-      include: [{ model: Post }],
+      include: [
+        {
+          model: Post,
+          include: [User] 
+        },
+      {
+        model: Comment
+      }],
     });
 
     const user = userData.get({ plain: true });
 
-    res.render('profile', {
+    res.render('dashboard', {
       ...user,
       logged_in: true
     });
@@ -64,7 +80,55 @@ router.get('/profile', withAuth, async (req, res) => {
   }
 });
 
-router.get('/login', (req, res) => {
+router.get('/create', async (req, res) => {
+  try {
+    if (req.session.logged_in) {
+      res.render('create', {
+        logged_in: req.session.logged_in,
+        userId: req.session.user_id
+      })
+      return
+    } else {
+      res.redirect('/login')
+    }
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
+
+router.get('/create/:id', async (req, res) => {
+  try {
+    const postData = await Post.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          attributes: ['name']
+        },
+        {
+          model: Comment,
+          include: [User]
+        }
+      ]
+    })
+    const post = postData.get({ plain: true })
+
+    if (req.session.logged_in) {
+      res.render('edit', {
+        ...post,
+        logged_in: req.session.logged_in,
+        userId: req.session.user_id
+      })
+      return
+    } else {
+      res.redirect('/login')
+    }
+
+  } catch (err) {
+    res.status(500).json(err)
+  }
+})
+
+router.all('/login', (req, res) => {
   if (req.session.logged_in) {
     res.redirect('/profile');
     return;
